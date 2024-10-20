@@ -11,7 +11,7 @@ jobs:
         
       - name: Download Artifact from JFrog
         run: |
-          wget --user=${{ secrets.JF_USER }} --password=${{ secrets.JF_PASSWORD }} https://knra.jfrog.io/artifactory/knnpm-npm-local/path/to/artifacts/build_20241015111239.tgz
+          wget --user=${{ secrets.JF_USER }} --password=${{ secrets.JF_PASSWORD }} https://knra.jfrog.io/artifactory/knrepo-local/gha-artifacts/build_20241020143306.tgz
         
       - name: Setup SSH
         run: |
@@ -24,4 +24,4 @@ jobs:
         
       - name: Extract Artifact on Remote Server
         run: |
-          ssh -o StrictHostKeyChecking=no -i id_rsa ubuntu@44.203.59.210 "sudo tar -xvzf /tmp/build_20241015111239.tgz -C /var/www/html"
+          ssh -o StrictHostKeyChecking=no -i id_rsa ubuntu@44.203.59.210 "sudo tar -xvzf /tmp/build_20241020143306.tgz -C /var/www/html"
