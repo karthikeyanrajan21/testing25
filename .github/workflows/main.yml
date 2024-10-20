@@ -1,25 +1,18 @@
+
 name: "Download and Extract Artifact"
 on: push
 
 jobs:
   download:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         
-      - name: Set Environment Variables
-        env:
-          ARTIFACT_URL: https://knra.jfrog.io/artifactory/knrepo-local/gha-artifacts/build_20241020143306.tgz
-          BUILD_NAME: build_20241020143306.tgz
-        run: |
-          echo "Artifact URL: $ARTIFACT_URL"
-          echo "Build Name: $BUILD_NAME"
-        
       - name: Download Artifact from JFrog
         run: |
-          wget --user=${{ secrets.JF_USER }} --password=${{ secrets.JF_PASSWORD }} $ARTIFACT_URL
+          wget --user=${{ secrets.JF_USER }} --password=${{ secrets.JF_PASSWORD }} https://knra.jfrog.io/artifactory/knnpm-npm-local/path/to/artifacts/build_20241015111239.tgz
         
       - name: Setup SSH
         run: |
@@ -28,8 +21,8 @@ jobs:
         
       - name: Copy Artifact to Remote Server
         run: |
-          scp -o StrictHostKeyChecking=no -i id_rsa $BUILD_NAME ubuntu@44.203.59.210:/tmp
+          scp -o StrictHostKeyChecking=no -i id_rsa build_20241015111239.tgz ubuntu@44.203.59.210:/tmp
         
       - name: Extract Artifact on Remote Server
         run: |
-          ssh -o StrictHostKeyChecking=no -i id_rsa ubuntu@44.203.59.210 "sudo tar -xvzf /tmp/$BUILD_NAME -C /var/www/html"
+          ssh -o StrictHostKeyChecking=no -i id_rsa ubuntu@44.203.59.210 "sudo tar -xvzf /tmp/build_20241015111239.tgz -C /var/www/html"
