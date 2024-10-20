@@ -2,7 +2,7 @@ name: "Download and Extract Artifact"
 on: push
 
 env:
-  ARTIFACT_URL: "https://knra.jfrog.io/artifactory/knrepo-local/gha-artifacts/build_20241020143306.tgz"
+  ARTIFACT_URL: "https://knra.jfrog.io/artifactory/knrepo-local/gha-artifacts/"
   BUILD_NAME: "build_20241020143306.tgz"
   MACHINE_NAME: "ubuntu"
   MACHINE_IP: "44.203.59.210"
