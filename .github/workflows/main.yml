@@ -29,15 +29,12 @@ jobs:
         run: |
           scp -o StrictHostKeyChecking=no -i id_rsa "${{ env.BUILD_NAME }}" "${{ env.MACHINE_NAME }}@${{ env.MACHINE_IP }}:/tmp"
         
-      - name: Extract Artifact on Remote Server and Copy to Destination
+      - name: Extract Artifact on Remote Server
         run: |
-          ssh -o StrictHostKeyChecking=no -i id_rsa "${{ env.MACHINE_NAME }}@${{ env.MACHINE_IP }}" << 'EOF'
-            # Extract the artifact
-            sudo tar -xvzf /tmp/${{ env.BUILD_NAME }} -C /tmp
-            
-            # Navigate to the extracted directory (assuming the directory name matches the build name)
-            cd /tmp/build_20241015111239  # Adjust this if the folder name is different
-            
-            # Copy contents to the destination folder
-            sudo cp -r * "${{ env.DESTINATION_FOLDER }}"
-          EOF
+          ssh -o StrictHostKeyChecking=no -i id_rsa "${{ env.MACHINE_NAME }}@${{ env.MACHINE_IP }}" \
+            sudo tar -xzvf /tmp/${{ env.BUILD_NAME }} -C /tmp
+        
+      - name: Copy Files to Destination Folder
+        run: |
+          ssh -o StrictHostKeyChecking=no -i id_rsa "${{ env.MACHINE_NAME }}@${{ env.MACHINE_IP }}" \
+            bash -c "cd /tmp/build && sudo cp -r * '${{ env.DESTINATION_FOLDER }}'"
