@@ -6,27 +6,22 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      # Checkout the repository (if needed)
       - name: Checkout
         uses: actions/checkout@v3
         
-      # Download the .tgz file from JFrog Artifactory
       - name: Download Artifact from JFrog
         run: |
           wget --user=${{ secrets.JF_USER }} --password=${{ secrets.JF_PASSWORD }} https://knra.jfrog.io/artifactory/knnpm-npm-local/path/to/artifacts/build_20241015111239.tgz
         
-      # Set up SSH
       - name: Setup SSH
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > id_rsa
           chmod 600 id_rsa
         
-      # Copy the artifact to the remote server
       - name: Copy Artifact to Remote Server
         run: |
           scp -o StrictHostKeyChecking=no -i id_rsa build_20241015111239.tgz ubuntu@44.203.59.210:/tmp
         
-      # Extract the artifact on the remote server
       - name: Extract Artifact on Remote Server
         run: |
-          ssh -o StrictHostKeyChecking=no -i id_rsa ubuntu@44.203.59.210 "tar -xvzf /tmp/build_20241015111239.tgz -C /var/www/html"
+          ssh -o StrictHostKeyChecking=no -i id_rsa ubuntu@44.203.59.210 "sudo tar -xvzf /tmp/build_20241015111239.tgz -C /var/www/html"
