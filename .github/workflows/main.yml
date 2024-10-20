@@ -6,6 +6,7 @@ env:
   BUILD_NAME: "build_20241015111239.tgz"
   MACHINE_NAME: "ubuntu"
   MACHINE_IP: "44.203.59.210"
+  DESTINATION_FOLDER: "/var/www/html"
 
 jobs:
   download:
@@ -28,6 +29,9 @@ jobs:
         run: |
           scp -o StrictHostKeyChecking=no -i id_rsa "${{ env.BUILD_NAME }}" "${{ env.MACHINE_NAME }}@${{ env.MACHINE_IP }}:/tmp"
         
-      - name: Extract Artifact on Remote Server
+      - name: Extract Artifact on Remote Server and Copy to Destination
         run: |
-          ssh -o StrictHostKeyChecking=no -i id_rsa "${{ env.MACHINE_NAME }}@${{ env.MACHINE_IP }}" "sudo tar -xvzf /tmp/${{ env.BUILD_NAME }} -C /var/www/html"
+          ssh -o StrictHostKeyChecking=no -i id_rsa "${{ env.MACHINE_NAME }}@${{ env.MACHINE_IP }}" << 'EOF'
+            sudo tar -xvzf /tmp/${{ env.BUILD_NAME }} -C /tmp
+            sudo cp -r /tmp/* "${{ env.DESTINATION_FOLDER }}"
+          EOF
