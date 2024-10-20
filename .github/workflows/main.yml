@@ -32,9 +32,6 @@ jobs:
       - name: Extract Artifact on Remote Server
         run: |
           ssh -o StrictHostKeyChecking=no -i id_rsa "${{ env.MACHINE_NAME }}@${{ env.MACHINE_IP }}" \
-            sudo tar -xzvf /tmp/${{ env.BUILD_NAME }} -C /tmp
-        
-      - name: Copy Files to Destination Folder
-        run: |
-          ssh -o StrictHostKeyChecking=no -i id_rsa "${{ env.MACHINE_NAME }}@${{ env.MACHINE_IP }}" \
-            bash -c "cd /tmp/build && sudo cp -r * '${{ env.DESTINATION_FOLDER }}'"
+            "sudo tar -xzvf /tmp/${{ env.BUILD_NAME }} -C /tmp && \
+            cd /tmp/build && \
+            sudo cp -r * '${{ env.DESTINATION_FOLDER }}'"
